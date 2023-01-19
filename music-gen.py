@@ -72,24 +72,24 @@ class Composition():
         for i,n in enumerate(self.notes):
             # Repeating notes
             if i > 1 and (self.notes[i-2] == self.notes[i-1] == n):
-                score -= 0.1
-            if abs(n - self.notes[i-1]) > 5:
                 score -= 0.15
-            if abs(n - self.notes[i-1]) > 7:
+            if abs(n - self.notes[i-1]) > 6:
                 score -= 0.25
+            if abs(n - self.notes[i-1]) > 8:
+                score -= 0.35
         
             # Lick 1
-            if i > 1 and (self.notes[i-2] == n) and (n != self.notes[i-1]) and (abs(n - self.notes[i-1]) < 3):
-                score += 0.08
-            # Lick 2
-            if i > 1 and (abs(self.notes[i-2] - self.notes[i-1]) < 3) and (abs(n - self.notes[i-1]) < 3):
+            if i > 1 and (0 < self.notes[i-2] == n) and (n != self.notes[i-1]) and (0 < abs(n - self.notes[i-1]) < 3):
                 score += 0.1
+            # Lick 2
+            if i > 1 and (0 < abs(self.notes[i-2] - self.notes[i-1]) < 3) and (0 < abs(n - self.notes[i-1]) < 3):
+                score += 0.12
                 
         # Encourage "good" notes
         for _ in range(self.notes.count(self.scale[4])):
-            score += 0.1
+            score += 0.15
         for _ in range(self.notes.count(self.scale[2])):
-            score += 0.2
+            score += 0.25
         for _ in range(self.notes.count(self.scale[0])):
             score += 0.15
         for _ in range(self.notes.count(self.scale[-1])):
@@ -97,9 +97,9 @@ class Composition():
             
         # "bad" notes
         for _ in range(self.notes.count(self.scale[1])):
-            score -= 0.1
+            score -= 0.15
         for _ in range(self.notes.count(self.scale[6])):
-            score -= 0.1
+            score -= 0.15
         
         return max(0.000001, score)
     
@@ -121,7 +121,7 @@ class Composition():
     
     def __repr__(self):
         s = [f'{n},{d}' for n,d in zip(self.notes, self.durations)]
-        return f'<Composition {s[0]}...{s[-1]}>'
+        return f'<Composition {" ".join(s)}>'
     
     
     
@@ -138,6 +138,7 @@ class MusicGA():
         self.worst = None
         self.targetfit = targetfit    
     
+
     def populate(self, scale):
         self.pop = []
         for _ in range(self.poplen):
@@ -209,7 +210,7 @@ class MusicGA():
                 break
                 
             if it % 500 == 0:
-                self.targetfit -= 0.02
+                self.targetfit -= 0.01
                 print(it, f)
                 
 
@@ -219,7 +220,7 @@ A_MINOR  = [57, 59, 60, 62, 64, 65, 67, 68]
 C_MAJOR  = [60, 62, 64, 65, 67, 69, 71, 72]
 
 if __name__ == '__main__':
-    mga = MusicGA(clen=64, poplen=500, mutrate=0.15, targetfit=8.0)
+    mga = MusicGA(clen=48, poplen=110, mutrate=0.21, targetfit=6.9)
     mga.populate(C_MAJOR)
     mga.make_pool()
     mga.run()
