@@ -210,7 +210,7 @@ class MusicGA():
                 break
                 
             if it % 500 == 0:
-                self.targetfit -= 0.01
+                #self.targetfit -= 0.01
                 print(it, f)
                 
 
@@ -220,26 +220,7 @@ A_MINOR  = [57, 59, 60, 62, 64, 65, 67, 68]
 C_MAJOR  = [60, 62, 64, 65, 67, 69, 71, 72]
 
 if __name__ == '__main__':
-    mga = MusicGA(clen=48, poplen=110, mutrate=0.21, targetfit=6.9)
+    mga = MusicGA(clen=48, poplen=110, mutrate=0.21, targetfit=6.0)
     mga.populate(C_MAJOR)
     mga.make_pool()
     mga.run()
-    
-    # Plot 1
-    #b,f = mga.best
-    #plt.hist(b.notes, color='skyblue', edgecolor='black')
-    #plt.title('Best Composition Note Histogram')
-    #plt.xlabel('Note')
-    #plt.ylabel('Frequency')
-    #plt.show()
-    
-    # Plot 2
-    #w,f = mga.worst
-    #w.save_midi('mga_worst.mid')
-    #plt.hist(w.notes, color='lightcoral', edgecolor='black')
-    #plt.title('Worst Composition Note Histogram')
-    #plt.xlabel('Note')
-    #plt.ylabel('Frequency')
-    #plt.show()
-
-
